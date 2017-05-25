@@ -2,20 +2,21 @@
 
 import sys
 import shelve
+from AESCipher import AESCipher
 
-if len(sys.argv) < 2:
-    print('Usage: python pw.py [account] - copy account password')
+if len(sys.argv) is not 2:
+    print('Usage: python pw.py [account]')
     sys.exit()
 
-account = sys.argv[1]      # first command line arg is the account name
+cipher = AESCipher('secretpassword')
+account = sys.argv[1]
 shelfFile = shelve.open('mydata')
 accounts = list(shelfFile.keys())
-# cats = ['Zophie', 'Pooka', 'Simon']
-# shelfFile['cats'] = cats
 
 if account in accounts:
-    password = shelfFile[account]
+    password = cipher.decrypt(shelfFile[account])
     print('Password for ' + account + ' is ' + password)
+    pass
 else:
     print('There is no account named ' + account)
 
